@@ -1,8 +1,6 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-import cv2 as cv
-
 
 class Khonen:
     def __init__(self, m: int, n: int, input_size: int, iterations: int):
@@ -25,7 +23,7 @@ class Khonen:
         pass
 
     def fit(self, data: np.ndarray):
-        r0 = 16
+        r0 = 10
         r = r0
         lr = self.learning_rate
         for it in range(self.iterations):
