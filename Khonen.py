@@ -25,7 +25,9 @@ class Khonen:
         pass
 
     def fit(self, data: np.ndarray):
-        r = 12
+        r0 = 16
+        r = r0
+        lr = self.learning_rate
         for it in range(self.iterations):
             for x in data:
                 minerror, index = math.inf, (-1, -1)
@@ -35,17 +37,17 @@ class Khonen:
                         (minerror, index) = (error, (i, j)) if error < minerror else (minerror, index)
                 window = self.weights[:, max(index[0] - r, 0):min(index[0] + r, self.m), max(index[1] - r, 0):min(index[1] + r, self.m)]
                 window += (self.learning_rate*(np.subtract(x.reshape((x.shape[0], 1, self.n)), window)))
-            self.learning_rate *= np.exp(-it/self.iterations)
-            r *= int(np.exp(-it//1000))
+            self.learning_rate =lr*np.exp(-it/self.iterations)
+            r = min(int(r0*np.exp(-it//100)),1)
 
 
-length = np.sqrt(np.random.uniform(0, 2, 500))
-angle = np.pi * np.random.uniform(0, 2, 500)
+length = np.sqrt(np.random.uniform(0, 2, 800))
+angle = np.pi * np.random.uniform(0, 2, 800)
 
 x = length * np.cos(angle)
 y = length * np.sin(angle)
 circle = np.vstack((x, y)).T
-k = Khonen(30, 1, 2, 1000)
+k = Khonen(30, 1, 2, 700)
 k.fit(circle)
 plt.scatter(x, y, c='r')
 plt.plot(k.getCorr()[0], k.getCorr()[1], marker='o')
